@@ -9,13 +9,14 @@ random.seed()
 class Boids(object):
     """boids_list"""
 
-    def __init__(self):
+    def __init__(self, posbounds):
         self.pos = (0, 0)
         self.velocity = (0, 0)
         self.max_velocity = 20
         self.acceleration = (0, 0)
         self.target = None
         self.forceapplied = (0, 0)
+        self.bounds = posbounds
 
     def seek(self, scaler):
         """Seek Behavior"""
@@ -31,8 +32,8 @@ class Boids(object):
         """Flee Behavior"""
         dist = Vec.get_dist(self.pos, self.target.pos)
         direction = Vec.get_normilized(dist)
-        self._addforce((direction[0] * Vec.get_mag(dist) * -150,
-                        direction[1] * Vec.get_mag(dist) * -150))
+        self._addforce((direction[0] * Vec.get_mag(dist) * -250,
+                        direction[1] * Vec.get_mag(dist) * -250))
         self._updatepos()
         self._updatevelocity(scaler)
         self._updateacceleration(scaler)
@@ -77,10 +78,14 @@ class Boids(object):
         """update_pos"""
         self.pos = (self.pos[0] + self.velocity[0],
                     self.pos[1] + self.velocity[1])
-        if self.pos[0] < 5:
-            self.pos[0] = (5, self.pos[1])
-        if self.pos[1] < 5:
-            self.pos[1] = (self.pos[0], 5)
+        if self.pos[0] < 10:
+            self.pos = (10, self.pos[1])
+        if self.pos[1] < 10:
+            self.pos = (self.pos[0], 10)
+        if self.pos[0] > self.bounds[0] - 10:
+            self.pos = (self.bounds[0] - 10, self.pos[1])
+        if self.pos[1] > self.bounds[1] - 10:
+            self.pos = (self.pos[0], self.bounds[1] - 10)
 
     def _addforce(self, forceapplied):
         """add_force"""

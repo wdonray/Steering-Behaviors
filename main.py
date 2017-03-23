@@ -21,12 +21,10 @@ RED = (255, 0, 0)
 ROWS = 1
 COLS = 3
 PAD = (5, 5)
-WIDTH = 63
-HEIGHT = 610
-SCREEN_WIDTH = COLS * (PAD[0] + WIDTH) + PAD[1]
-SCREEN_HEIGHT = ROWS * (PAD[0] + HEIGHT) + PAD[1]
+WIDTH = 210
+HEIGHT = 620
 CLOCK = pygame.time.Clock()
-the_screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+the_screen = pygame.display.set_mode((1280, 720))
 SEARCH_SPACE = Graph([ROWS, COLS])
 
 pygame.mouse.set_cursor(*pygame.cursors.diamond)
@@ -51,6 +49,7 @@ FONT = pygame.font.Font(None, 45)
 def main_menu():
     """main_menu"""
     CLOCK.tick(60)
+    pygame.display.set_mode((WIDTH, HEIGHT))
     main_done = False
 
     selected = BOXES[0]
@@ -101,10 +100,11 @@ def test_seek():
     seek_done = False
     pygame.display.set_mode((1080, 720))
     boids_list = []
-    targeted = Boids()
+    targeted = Boids((the_screen.get_width(), the_screen.get_height()))
 
     for itera in range(5):
-        boids_list.append(Boids())
+        boids_list.append(
+            Boids((the_screen.get_width(), the_screen.get_height())))
         boids_list[itera].target = targeted
         boids_list[itera].pos = (random.randrange(0, the_screen.get_width() + 1),
                                  random.randrange(0, the_screen.get_height() + 1))
@@ -120,12 +120,13 @@ def test_seek():
                 if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                     seek_done = True
                 if pygame.key.get_pressed()[pygame.K_p]:
-                    pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+                    pygame.display.set_mode((WIDTH, HEIGHT))
                     main_menu()
         for boid in boids_list:
             boid.seek(delta_time)
             pygame.draw.rect(
-                the_screen, YELLOW, [int(round(boid.pos[0])), int(round(boid.pos[1])), 20, 20])
+                the_screen, (0, random.randrange(0, 255), random.randrange(0, 255)), [
+                    int(round(boid.pos[0])), int(round(boid.pos[1])), 20, 20])
             pygame.draw.line(the_screen, WHITE, ((int(round(boid.pos[0]))),
                                                  (int(round(boid.pos[1])))),
                              ((int(round(targeted.pos[0]))), (int(round(targeted.pos[1])))), 2)
@@ -141,13 +142,13 @@ def test_seek():
 def test_flee():
     """Testing Flee"""
     flee_done = False
-    pygame.display.set_mode((1080, 720))
-    the_screen = pygame.display.get_surface()
+    pygame.display.set_mode((1280, 720))
     boids_list = []
-    targeted = Boids()
+    targeted = Boids((the_screen.get_width(), the_screen.get_height()))
 
     for itera in range(5):
-        boids_list.append(Boids())
+        boids_list.append(
+            Boids((the_screen.get_width(), the_screen.get_height())))
         boids_list[itera].target = targeted
         boids_list[itera].pos = (random.randrange(0, the_screen.get_width() + 1),
                                  random.randrange(0, the_screen.get_height() + 1))
@@ -163,7 +164,7 @@ def test_flee():
                 if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                     flee_done = True
                 if pygame.key.get_pressed()[pygame.K_p]:
-                    pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+                    pygame.display.set_mode((WIDTH, HEIGHT))
                     main_menu()
         for boid in boids_list:
             boid.flee(delta_time)
