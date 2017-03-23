@@ -1,6 +1,6 @@
 """Main File"""
-import pygame
 import random
+import pygame
 from boids import Boids
 
 pygame.init()
@@ -18,13 +18,13 @@ DONE = False
 CLOCK = pygame.time.Clock()
 
 pygame.mouse.set_cursor(*pygame.cursors.diamond)
-pygame.display.set_mode((1280, 720))
+pygame.display.set_mode((1080, 720))
 SCREEN = pygame.display.get_surface()
 BOIDS = []
 TARGETED = Boids()
-TARGETED.pos = pygame.mouse.get_pos()
+TARGETED.pos = (SCREEN.get_width() / 2, SCREEN.get_height() / 2)
 
-for x in range(50):
+for x in range(10):
     BOIDS.append(Boids())
     BOIDS[x].target = TARGETED
     BOIDS[x].pos = (random.randrange(0, SCREEN.get_width() + 1),
@@ -32,7 +32,7 @@ for x in range(50):
 
 while not DONE:
     CLOCK.tick(60)
-    DELTATIME = CLOCK.get_time()
+    DELTATIME = float(CLOCK.get_time()) / float(2500)
     pygame.display.set_mode((1280, 720))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -40,14 +40,16 @@ while not DONE:
         if event.type == pygame.KEYDOWN:
             if pygame.key.get_pressed()[pygame.K_ESCAPE]:
                 DONE = True
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                TARGETED.pos = pygame.mouse.get_pos()
     for boid in BOIDS:
         boid.seek(DELTATIME)
         pygame.draw.circle(
-            SCREEN, YELLOW, ((int(round(boid.pos[0])), int(round(boid.pos[1])))), 5, 0)
+            SCREEN, YELLOW, (
+                int(round(boid.pos[0])), int(round(boid.pos[1]))),
+            5, 0)
     pygame.draw.circle(
-        SCREEN, RED, ((int(round(TARGETED.pos[0])), int(round(TARGETED.pos[1])))), 15, 0)
+        SCREEN, RED, (int(round(TARGETED.pos[0])), int(
+            round(TARGETED.pos[1]))),
+        15, 0)
+    TARGETED.pos = pygame.mouse.get_pos()
     pygame.display.flip()
 pygame.quit()
