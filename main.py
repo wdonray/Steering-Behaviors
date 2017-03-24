@@ -76,17 +76,21 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for callback in mouse_listeners:
                     cb = callback(pygame.mouse.get_pos())
+                    selected = cb
                     if cb:
                         if (event.button == 1 and
                                 BOXES[selected.identification] is BOXES[0]):
+                            selected = cb
                             test_seek()
                         elif (event.button == 1 and
                               BOXES[selected.identification] is BOXES[1]):
+                            selected = cb
                             test_flee()
+
         the_screen.fill(BLACK)
 
-        pygame.draw.rect(the_screen, PINK, [selected.xpos, selected.ypos, selected.width + 5,
-                                            selected.height + 5])
+        pygame.draw.rect(the_screen, PINK, [selected.xpos, selected.ypos,
+                                            selected.width + 5, selected.height + 5])
 
         for things in BOXES:
             things.draw(the_screen, FONT)
@@ -102,7 +106,7 @@ def test_seek():
     boids_list = []
     targeted = Boids((the_screen.get_width(), the_screen.get_height()))
 
-    for itera in range(5):
+    for itera in range(10):
         boids_list.append(
             Boids((the_screen.get_width(), the_screen.get_height())))
         boids_list[itera].target = targeted
@@ -146,7 +150,7 @@ def test_flee():
     boids_list = []
     targeted = Boids((the_screen.get_width(), the_screen.get_height()))
 
-    for itera in range(5):
+    for itera in range(10):
         boids_list.append(
             Boids((the_screen.get_width(), the_screen.get_height())))
         boids_list[itera].target = targeted
