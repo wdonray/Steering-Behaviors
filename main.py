@@ -47,7 +47,7 @@ FONT = pygame.font.Font(None, 45)
 
 
 def main_menu():
-    """main_menu"""
+    """main_menu."""
     CLOCK.tick(60)
     pygame.display.set_mode((WIDTH, HEIGHT))
     main_done = False
@@ -99,7 +99,7 @@ def main_menu():
 
 
 def test_seek():
-    """Testing Seek"""
+    """Testing Seek."""
     seek_done = False
     pygame.display.set_mode((1280, 720))
     boids_list = []

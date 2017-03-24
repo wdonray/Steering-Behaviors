@@ -1,4 +1,4 @@
-"""Steering Behaviors"""
+"""Steering Behaviors."""
 
 import random
 import vector as Vec
@@ -7,9 +7,10 @@ random.seed()
 
 
 class Boids(object):
-    """boids_list"""
+    """Boids_list."""
 
     def __init__(self, posbounds):
+        """Initialize."""
         self.pos = (0, 0)
         self.velocity = (0, 0)
         self.max_velocity = 20
@@ -19,7 +20,7 @@ class Boids(object):
         self.bounds = posbounds
 
     def seek(self, scaler):
-        """Seek Behavior"""
+        """Seek Behavior."""
         dist = Vec.get_dist(self.pos, self.target.pos)
         direction = Vec.get_normilized(dist)
         self._addforce((direction[0] * Vec.get_mag(dist) * 150,
@@ -29,7 +30,7 @@ class Boids(object):
         self._updateacceleration(scaler)
 
     def flee(self, scaler):
-        """Flee Behavior"""
+        """Flee Behavior."""
         dist = Vec.get_dist(self.pos, self.target.pos)
         direction = Vec.get_normilized(dist)
         self._addforce((direction[0] * Vec.get_mag(dist) * -250,
@@ -39,7 +40,7 @@ class Boids(object):
         self._updateacceleration(scaler)
 
     def wander(self, scaler):
-        """Wander Behavior"""
+        """Wander Behavior."""
         #jitter = random.choice()
         # radius =
         # distance =
@@ -48,15 +49,15 @@ class Boids(object):
         self._updateacceleration(scaler)
 
     def pursue(self):
-        """Pursue Behavior"""
+        """Pursue Behavior."""
         pass
 
     def evade(self):
-        """Evade Behavior"""
+        """Evade Behavior."""
         pass
 
     def arrival(self):
-        """Arrival Behavior"""
+        """Arrival Behavior."""
         pass
 
     def _updateacceleration(self, time):
@@ -64,7 +65,7 @@ class Boids(object):
                              self.forceapplied[1] * time)
 
     def _updatevelocity(self, time):
-        """update_velocity"""
+        """update_velocity."""
         self.velocity = ((self.velocity[0] + self.acceleration[0]) * time,
                          (self.velocity[1] + self.acceleration[1]) * time)
 
@@ -75,7 +76,7 @@ class Boids(object):
                              self.max_velocity)
 
     def _updatepos(self):
-        """update_pos"""
+        """update_pos."""
         self.pos = (self.pos[0] + self.velocity[0],
                     self.pos[1] + self.velocity[1])
         if self.pos[0] < 10:
@@ -88,6 +89,6 @@ class Boids(object):
             self.pos = (self.pos[0], self.bounds[1] - 10)
 
     def _addforce(self, forceapplied):
-        """add_force"""
+        """add_force."""
         self.forceapplied = (forceapplied[0],
                              forceapplied[1])
