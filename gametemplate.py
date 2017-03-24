@@ -13,9 +13,10 @@ class GameTemplate(object):
         self.name = ""
         pygame.display.init()
         pygame.font.init()
+        self.screen = SCREEN
         pygame.display.set_mode((1280, 720))
         self.clock = pygame.time.Clock()
-        self.fps = 60
+        self.fps = 1
         self.playtime = 0.0
         pygame.mouse.set_cursor(*pygame.cursors.diamond)
         self.gamestates = {}

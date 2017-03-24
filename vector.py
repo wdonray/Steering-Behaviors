@@ -12,8 +12,16 @@ class Vector2(object):
         self.xpos = self.value[0]
         self.ypos = self.value[1]
 
+    def __str__(self):
+        return "Position: " + str(self.xpos) + ", " + str(self.ypos)
+    def __getitem__(self, key):
+        '''override index'''
+        return self.value[key]
+
     def get_normilized(self, vector):
         """Get_normilized."""
+        if self.get_mag(vector) == 0:
+            return (0, 0)
         return vector[0] / self.get_mag(vector), vector[1] / self.get_mag(vector)
 
     def get_mag(self, vector):
@@ -40,3 +48,15 @@ class Vector2(object):
     def get_dist(self, vector1, vector2):
         """Get_dist."""
         return (vector2[0] - vector1[0], vector2[1] - vector1[1])
+
+
+def test():
+    a = Vector2(1, 1) 
+    print a
+    b = a * 5
+    print b
+    c = a * 0.5
+    print c
+
+if __name__ == '__main__':
+    test()
