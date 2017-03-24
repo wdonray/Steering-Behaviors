@@ -1,11 +1,12 @@
-"""DrawableNode"""
+"""DrawableNode."""
 import pygame
 
 
 class DrawableNode(object):
-    '''drawable node'''
+    """drawable node."""
 
     def __init__(self, graphnode, ident):
+        """Initialize."""
         posx = graphnode.value[0]
         posy = graphnode.value[1]
         self.string = ""
@@ -25,7 +26,7 @@ class DrawableNode(object):
         self._color = (102, 255, 102)
 
     def printpos(self, mousepos):
-        """Test"""
+        """Test."""
         x = mousepos[0]
         y = mousepos[1]
         if (x > self.rect.left and x < self.rect.right and y > self.rect.top and y <
@@ -33,7 +34,7 @@ class DrawableNode(object):
             return self
 
     def draw(self, screen, font, init=True, text=True):
-        """Draw"""
+        """Draw."""
         self.surface.fill(self._color)
         screen.blit(self.surface, self.screenpos)
 

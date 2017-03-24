@@ -23,21 +23,23 @@ class Boids(object):
         """Seek Behavior."""
         dist = Vec.get_dist(self.pos, self.target.pos)
         direction = Vec.get_normilized(dist)
-        self._addforce((direction[0] * Vec.get_mag(dist) * 150,
-                        direction[1] * Vec.get_mag(dist) * 150))
+        vec = self._addforce((direction[0] * Vec.get_mag(dist) * 150,
+                              direction[1] * Vec.get_mag(dist) * 150))
         self._updatepos()
         self._updatevelocity(scaler)
         self._updateacceleration(scaler)
+        return vec
 
     def flee(self, scaler):
         """Flee Behavior."""
         dist = Vec.get_dist(self.pos, self.target.pos)
         direction = Vec.get_normilized(dist)
-        self._addforce((direction[0] * Vec.get_mag(dist) * -250,
-                        direction[1] * Vec.get_mag(dist) * -250))
+        vec = self._addforce((direction[0] * Vec.get_mag(dist) * -250,
+                              direction[1] * Vec.get_mag(dist) * -250))
         self._updatepos()
         self._updatevelocity(scaler)
         self._updateacceleration(scaler)
+        return vec
 
     def wander(self, scaler):
         """Wander Behavior."""
