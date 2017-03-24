@@ -5,6 +5,9 @@ import pygame
 class DrawableNode(object):
     """drawable node."""
 
+    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-function-args
+
     def __init__(self, graphnode, ident):
         """Initialize."""
         posx = graphnode.value[0]
@@ -27,9 +30,9 @@ class DrawableNode(object):
 
     def printpos(self, mousepos):
         """Test."""
-        x = mousepos[0]
-        y = mousepos[1]
-        if (x > self.rect.left and x < self.rect.right and y > self.rect.top and y <
+        ex = mousepos[0]
+        why = mousepos[1]
+        if (ex > self.rect.left and ex < self.rect.right and why > self.rect.top and why <
                 self.rect.bottom):
             return self
 

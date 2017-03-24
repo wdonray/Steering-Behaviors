@@ -1,13 +1,13 @@
 """Steering Behaviors."""
 
 import random
-import vector as Vec
+from vector import Vector2 as Vec
 
 random.seed()
 
 
-class Boids(object):
-    """Boids_list."""
+class Agent(object):
+    """Agent_list."""
 
     def __init__(self, posbounds):
         """Initialize."""
@@ -18,13 +18,14 @@ class Boids(object):
         self.target = None
         self.forceapplied = (0, 0)
         self.bounds = posbounds
+        self.Vec_ = Vec(0, 0)
 
     def seek(self, scaler):
         """Seek Behavior."""
-        dist = Vec.get_dist(self.pos, self.target.pos)
-        direction = Vec.get_normilized(dist)
-        vec = self._addforce((direction[0] * Vec.get_mag(dist) * 150,
-                              direction[1] * Vec.get_mag(dist) * 150))
+        dist = self.Vec_.get_dist(self.pos, self.target.pos)
+        direction = self.Vec_.get_normilized(dist)
+        vec = self._addforce((direction[0] * self.Vec_.get_mag(dist) * 150,
+                              direction[1] * self.Vec_.get_mag(dist) * 150))
         self._updatepos()
         self._updatevelocity(scaler)
         self._updateacceleration(scaler)
@@ -32,10 +33,10 @@ class Boids(object):
 
     def flee(self, scaler):
         """Flee Behavior."""
-        dist = Vec.get_dist(self.pos, self.target.pos)
-        direction = Vec.get_normilized(dist)
-        vec = self._addforce((direction[0] * Vec.get_mag(dist) * -250,
-                              direction[1] * Vec.get_mag(dist) * -250))
+        dist = self.Vec_.get_dist(self.pos, self.target.pos)
+        direction = self.Vec_.get_normilized(dist)
+        vec = self._addforce((direction[0] * self.Vec_.get_mag(dist) * -250,
+                              direction[1] * self.Vec_.get_mag(dist) * -250))
         self._updatepos()
         self._updatevelocity(scaler)
         self._updateacceleration(scaler)
@@ -71,10 +72,10 @@ class Boids(object):
         self.velocity = ((self.velocity[0] + self.acceleration[0]) * time,
                          (self.velocity[1] + self.acceleration[1]) * time)
 
-        if Vec.get_mag(self.velocity) > self.max_velocity:
-            self.velocity = (Vec.get_normilized(self.velocity)[0] *
+        if self.Vec_.get_mag(self.velocity) > self.max_velocity:
+            self.velocity = (self.Vec_.get_normilized(self.velocity)[0] *
                              self.max_velocity,
-                             Vec.get_normilized(self.velocity)[1] *
+                             self.Vec_.get_normilized(self.velocity)[1] *
                              self.max_velocity)
 
     def _updatepos(self):

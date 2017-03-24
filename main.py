@@ -3,7 +3,7 @@ import random
 
 import pygame
 
-from boids import Boids
+from agent import Agent
 from drawablenode import DrawableNode
 from graph import Graph
 
@@ -102,14 +102,14 @@ def test_seek():
     """Testing Seek."""
     seek_done = False
     pygame.display.set_mode((1280, 720))
-    boids_list = []
-    targeted = Boids((SCREEN.get_width(), SCREEN.get_height()))
+    Agent_list = []
+    targeted = Agent((SCREEN.get_width(), SCREEN.get_height()))
 
     for itera in range(10):
-        boids_list.append(
-            Boids((SCREEN.get_width(), SCREEN.get_height())))
-        boids_list[itera].target = targeted
-        boids_list[itera].pos = (random.randrange(0, SCREEN.get_width() + 1),
+        Agent_list.append(
+            Agent((SCREEN.get_width(), SCREEN.get_height())))
+        Agent_list[itera].target = targeted
+        Agent_list[itera].pos = (random.randrange(0, SCREEN.get_width() + 1),
                                  random.randrange(0, SCREEN.get_height() + 1))
 
     while not seek_done:
@@ -125,7 +125,7 @@ def test_seek():
                 if pygame.key.get_pressed()[pygame.K_p]:
                     pygame.display.set_mode((WIDTH, HEIGHT))
                     main_menu()
-        for boid in boids_list:
+        for boid in Agent_list:
             boid.seek(delta_time)
             pygame.draw.rect(
                 SCREEN, (0, random.randrange(0, 255), random.randrange(0, 255)), [
@@ -146,14 +146,14 @@ def test_flee():
     """Testing Flee."""
     flee_done = False
     pygame.display.set_mode((1280, 720))
-    boids_list = []
-    targeted = Boids((SCREEN.get_width(), SCREEN.get_height()))
+    Agent_list = []
+    targeted = Agent((SCREEN.get_width(), SCREEN.get_height()))
 
     for itera in range(10):
-        boids_list.append(
-            Boids((SCREEN.get_width(), SCREEN.get_height())))
-        boids_list[itera].target = targeted
-        boids_list[itera].pos = (random.randrange(0, SCREEN.get_width() + 1),
+        Agent_list.append(
+            Agent((SCREEN.get_width(), SCREEN.get_height())))
+        Agent_list[itera].target = targeted
+        Agent_list[itera].pos = (random.randrange(0, SCREEN.get_width() + 1),
                                  random.randrange(0, SCREEN.get_height() + 1))
 
     while not flee_done:
@@ -169,7 +169,7 @@ def test_flee():
                 if pygame.key.get_pressed()[pygame.K_p]:
                     pygame.display.set_mode((WIDTH, HEIGHT))
                     main_menu()
-        for boid in boids_list:
+        for boid in Agent_list:
             boid.flee(delta_time)
             pygame.draw.rect(
                 SCREEN, YELLOW, [int(round(boid.pos[0])), int(round(boid.pos[1])), 20, 20])
