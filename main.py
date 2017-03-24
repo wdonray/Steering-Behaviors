@@ -86,7 +86,6 @@ def main_menu():
                               BOXES[selected.identification] is BOXES[1]):
                             selected = cb
                             test_flee()
-
         the_screen.fill(BLACK)
 
         pygame.draw.rect(the_screen, PINK, [selected.xpos, selected.ypos,
@@ -102,11 +101,11 @@ def main_menu():
 def test_seek():
     """Testing Seek"""
     seek_done = False
-    pygame.display.set_mode((1080, 720))
+    pygame.display.set_mode((1280, 720))
     boids_list = []
     targeted = Boids((the_screen.get_width(), the_screen.get_height()))
 
-    for itera in range(10):
+    for itera in range(3000):
         boids_list.append(
             Boids((the_screen.get_width(), the_screen.get_height())))
         boids_list[itera].target = targeted
@@ -131,9 +130,9 @@ def test_seek():
             pygame.draw.rect(
                 the_screen, (0, random.randrange(0, 255), random.randrange(0, 255)), [
                     int(round(boid.pos[0])), int(round(boid.pos[1])), 20, 20])
-            pygame.draw.line(the_screen, WHITE, ((int(round(boid.pos[0]))),
-                                                 (int(round(boid.pos[1])))),
-                             ((int(round(targeted.pos[0]))), (int(round(targeted.pos[1])))), 2)
+            #pygame.draw.line(the_screen, WHITE, ((int(round(boid.pos[0]))),
+                                                 #(int(round(boid.pos[1])))),
+                             #((int(round(targeted.pos[0]))), (int(round(targeted.pos[1])))), 2)
         pygame.draw.circle(
             the_screen, RED, (int(round(targeted.pos[0])), int(
                 round(targeted.pos[1]))),
@@ -150,7 +149,7 @@ def test_flee():
     boids_list = []
     targeted = Boids((the_screen.get_width(), the_screen.get_height()))
 
-    for itera in range(10):
+    for itera in range(3000):
         boids_list.append(
             Boids((the_screen.get_width(), the_screen.get_height())))
         boids_list[itera].target = targeted
@@ -174,9 +173,9 @@ def test_flee():
             boid.flee(delta_time)
             pygame.draw.rect(
                 the_screen, YELLOW, [int(round(boid.pos[0])), int(round(boid.pos[1])), 20, 20])
-            pygame.draw.line(the_screen, WHITE, ((int(round(boid.pos[0]))),
-                                                 (int(round(boid.pos[1])))),
-                             ((int(round(targeted.pos[0]))), (int(round(targeted.pos[1])))), 2)
+            #pygame.draw.line(the_screen, WHITE, ((int(round(boid.pos[0]))),
+                                                 #(int(round(boid.pos[1])))),
+                             #((int(round(targeted.pos[0]))), (int(round(targeted.pos[1])))), 2)
         pygame.draw.circle(
             the_screen, RED, (int(round(targeted.pos[0])), int(
                 round(targeted.pos[1]))),
