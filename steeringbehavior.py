@@ -16,25 +16,22 @@ class SteeringBehavior(GameTemplate):
         super(SteeringBehavior, self).__init__()
         self.name = name
         self.gameobjects = []
-        self.targeted = Agent((pygame.display.get_surface().get_width(),
-                               pygame.display.get_surface().get_height()))
 
     def addtobatch(self, gameobject):
         """Add gameobjects to this game."""
         self.gameobjects.append(gameobject)
-        #gameobject.set_target(self.targeted)
 
     def update(self):
         """Update this games logic."""
         if not super(SteeringBehavior, self).update():
             return False
+        for event in self.events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for i in self.gameobjects:
+                    i.set_target(pygame.mouse.get_pos())
         for i in self.gameobjects:
             i.update(self.deltatime)
-        # self.targeted = pygame.mouse.get_pos()
-        # for i in self.gameobjects:
-        #     if type(i) == Agent:
-        #         i.seek(self.deltatime)
-        #         print i.velocity
+
         return True
 
     def draw(self):
