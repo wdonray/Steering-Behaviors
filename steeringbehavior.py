@@ -25,14 +25,18 @@ class SteeringBehavior(GameTemplate):
         """Update this games logic."""
         if not super(SteeringBehavior, self).update():
             return False
-        for event in self.events:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                for i in self.gameobjects:
-                    i.set_target(
-                        (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
-        for i in self.gameobjects:
-            i.update(self.deltatime)
-
+        if self.get_state() == "seek":
+            for i in self.gameobjects:
+                i.set_target(
+                    (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
+            for i in self.gameobjects:
+                i.updateseek(self.deltatime)
+        if self.get_state() == "flee":
+            for i in self.gameobjects:
+                i.set_target(
+                    (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
+            for i in self.gameobjects:
+                i.updateflee(self.deltatime)
         return True
 
     def draw(self):

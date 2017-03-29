@@ -9,19 +9,37 @@ class Vector2(object):
     def __init__(self, xpos, ypos):
         """Initialize."""
         self.value = (xpos, ypos)
-        self.xpos = self.value[0]
-        self.ypos = self.value[1]
+        self._xpos = self.value[0]
+        self._ypos = self.value[1]
+
+    def setx(self, value):
+        self._xpos = value
+        self.value = (value, self._ypos)
+
+    def getx(self):
+        return self.value[0]
+
+    def sety(self, value):
+        self._ypos = value
+        self.value = (self._xpos, value)
+
+    def gety(self):
+        return self.value[1]
+
+    xpos = property(getx, setx)
+    ypos = property(gety, sety)
 
     def __str__(self):
+        """Override string."""
         return "Position: " + str(self.xpos) + ", " + str(self.ypos)
 
     def __getitem__(self, key):
-        '''override index'''
+        """Override index."""
         return self.value[key]
 
     @property
     def magnitude(self):
-        '''magnitude'''
+        """Magnitude."""
         return self.get_mag()
 
     def get_mag(self):
@@ -43,17 +61,20 @@ class Vector2(object):
 
     @property
     def direction(self):
-        '''aaa'''
+        """Direction."""
         return self.get_direction()
 
     def get_direction(self):
         """Get direction of vector."""
         v_mag = self.magnitude
+        if v_mag == 0:
+            return Vector2(0, 0)
         return Vector2(self.xpos / v_mag, self.ypos / v_mag)
 
     def get_dist(self, vector1, vector2):
         """Get_dist."""
-        return (vector2[0] - vector1[0], vector2[1] - vector1[1])
+        return (vector2.xpos - vector1.xpos, vector2.ypos - vector1.ypos)
+
 
 if __name__ == '__main__':
     testv = Vector2(-25, -25)

@@ -4,11 +4,15 @@ import random
 
 import pygame
 
+from gametemplate import *
+from constants import *
 from vector import Vector2 as Vec2
-
 from vector import *
 
 random.seed()
+
+# pylint: disable=E1121
+# pylint: disable=E1101
 
 
 class Agent(object):
@@ -17,12 +21,16 @@ class Agent(object):
     def __init__(self, position):
         """Initialize."""
         self.pos = position
-        self.velocity = Vec2(1, 0)
-        self.acceleration = Vec2(1, 0)
+        self.velocity = Vec2(0, 0)
+        self.acceleration = Vec2(0, 0)
         self.targetpos = Vec2(0, 0)
-        self.force = Vec2(1, 0)
+        self.force = Vec2(0, 0)
         self.mass = 1
-        self.direction = Vec2(1, 0)
+        self.direction = self.velocity.direction
+        self.surface = pygame.Surface((20, 20), pygame.SRCALPHA)
+        pygame.draw.circle(self.surface, (125, 125, 255), (10, 10), 10, 0)
+        self.font = pygame.font.SysFont('mono', 12)
+
 
     def set_target(self, target):
         """Set Target."""
@@ -34,29 +42,42 @@ class Agent(object):
 
     def seek(self, target):
         """Seek Behavior."""
-        max_velocity = 20
+        max_velocity = 200
         displacement = target - self.pos
         force = displacement.direction * max_velocity
         seekforce = force - self.velocity
         return seekforce
 
+    def flee(self, target):
+        """Flee Behavior."""
+        max_velocity = 200
+        displacement = target - self.pos
+        force = displacement.direction * max_velocity * -1
+        fleeforce = force - self.velocity
+        return fleeforce
+
+    def wander(self, radius, dist, jitter, strength):
+        """Wander Behavior."""
+        pass
+
     def draw(self, screen):
         """Draw the gameobject."""
-        posx = int(self.pos[0])
-        posy = int(self.pos[1])
+        textpos = "Pos: <{0:.5} {1:.5}>".format(
+            self.pos.xpos, self.pos.ypos)
+        surface = self.font.render(textpos, True, (0, 0, 0))
+        screen.blit(surface, (self.pos.xpos, self.pos.ypos + 25))
+        screen.blit(self.surface, (self.pos.xpos, self.pos.ypos))
 
-        pygame.draw.circle(screen, (125, 125, 255), (posx, posy), 25, 0)
-
-    def update(self, deltatime):
+    def updateseek(self, deltatime):
         """Update gameobject logic."""
-        # self.seek(deltatime)
-        force = self.seek(self.targetpos)
-        self.addforce(force * 5)
-        self.force = self.force * deltatime
-        self.acceleration = self.force * (1 / self.mass)
-        self.velocity = self.velocity + self.force * deltatime
+        self.acceleration = self.force + self.seek(self.targetpos)
+        self.velocity = self.velocity + self.acceleration * deltatime
         self.direction = self.velocity.direction
-        if self.velocity.magnitude > 20:
-            self.velocity = self.velocity * (1 / 20)
-        self.pos = self.pos + self.velocity
-        print self.pos
+        self.pos = self.pos + self.velocity * deltatime
+
+    def updateflee(self, deltatime):
+        """Update gameobject logic."""
+        self.acceleration = self.force + self.flee(self.targetpos)
+        self.velocity = self.velocity + self.acceleration * deltatime
+        self.direction = self.velocity.direction
+        self.pos = self.pos + self.velocity * deltatime
