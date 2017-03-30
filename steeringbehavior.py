@@ -26,14 +26,14 @@ class SteeringBehavior(GameTemplate):
             for i in self.gameobjects:
                 i.set_target(
                     (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
-            for i in self.gameobjects:
                 i.updateseek(self.deltatime)
         if self.get_state() == "flee":
             for i in self.gameobjects:
                 i.set_target(
                     (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
-            for i in self.gameobjects:
                 i.updateflee(self.deltatime)
+        if self.get_state() == "wander":
+            pass
         return True
 
     def draw(self):

@@ -29,7 +29,6 @@ class Agent(object):
         self.heading = Vec2(0, 0)
         self.direction = self.velocity.direction
         self.surface = pygame.Surface((45, 25), pygame.SRCALPHA)
-        #pygame.draw.circle(self.surface, (125, 125, 255), (10, 10), 10, 0)
         pygame.draw.lines(self.surface, random.choice((BLACK, BLUE, PINK, MAROON, GREEN)),
                           True, [(1, 1), (15, 25), (25, 1)], 2)
         pygame.draw.circle(self.surface, RED, (25, 3), 3)
@@ -80,24 +79,28 @@ class Agent(object):
         surfacev = self.font.render(velpos, True, (0, 0, 0))
         screen.blit(surfacev, (self.pos.xpos - 50, self.pos.ypos + 70))
 
+        howpos = "F1 to Seek / F2 to Flee / F3 to Wander"
+        surfaceh = self.font.render(howpos, True, (0, 0, 0))
+        screen.blit(surfaceh, (screen.get_width() / 2 + 10, 30))
+
         rotate = pygame.transform.rotate(
             self.surface, -180 * math.atan2(self.heading[1], self.heading[0]) / math.pi)
         self.heading = Vec2.get_direction(self.velocity)
 
         screen.blit(rotate, (self.pos.xpos, self.pos.ypos))
 
-    def updateseek(self, deltatime):
+    def update(self, deltatime):
         """Update gameobject logic."""
-        self.acceleration = self.force + self.seek(self.targetpos)
         self.velocity = self.velocity + self.acceleration * deltatime
         self.direction = self.velocity.direction
         self.pos = self.pos + self.velocity * deltatime
-        # if (int(self.pos.xpos) == self.targetpos.xpos and
-        # int(self.pos.ypos) == self.targetpos.ypos):
+
+    def updateseek(self, deltatime):
+        """Update seek logic."""
+        self.acceleration = self.seek(self.targetpos)
+        self.update(deltatime)
 
     def updateflee(self, deltatime):
-        """Update gameobject logic."""
-        self.acceleration = self.force + self.flee(self.targetpos)
-        self.velocity = self.velocity + self.acceleration * deltatime
-        self.direction = self.velocity.direction
-        self.pos = self.pos + self.velocity * deltatime
+        """Update flee logic."""
+        self.acceleration = self.flee(self.targetpos)
+        self.update(deltatime)

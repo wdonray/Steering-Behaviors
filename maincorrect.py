@@ -14,7 +14,7 @@ def main():
     """Main execution."""
     game = SteeringBehavior("Steering Behaviors")
     # make gameobjects to participate in game
-    for i in range(1):
+    for _ in range(1):
         game.addtobatch(Agent(Vector2(0.0 + (random.randint(0, SCREEN.get_width())),
                                       0.0 + (random.randint(0, SCREEN.get_height())))))
     # game.addtobatch(Agent(Vector2(200.0, 200.0)))
