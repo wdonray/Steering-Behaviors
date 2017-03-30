@@ -1,11 +1,12 @@
 """Steering Behaviors."""
 
+import math
 import random
 
 import pygame
 
-from gametemplate import *
 from constants import *
+from gametemplate import *
 from vector import Vector2 as Vec2
 from vector import *
 
@@ -26,6 +27,7 @@ class Agent(object):
         self.targetpos = Vec2(0, 0)
         self.force = Vec2(0, 0)
         self.mass = 1
+        self.wander_angle = 180
         self.heading = Vec2(0, 0)
         self.direction = self.velocity.direction
         self.surface = pygame.Surface((45, 25), pygame.SRCALPHA)
@@ -58,9 +60,17 @@ class Agent(object):
         fleeforce = force - self.velocity
         return fleeforce
 
-    def wander(self, radius, dist, jitter, strength):
+    def wander(self, distance, radius):
         """Wander Behavior."""
-        pass
+        center_circle = self.velocity.get_direction()
+        center_circle = center_circle * distance
+        displacement = Vec2(0, 1) * radius
+        self.wander_angle += (random.random() * 1) - (1 * .5)
+        displacement.xpos = math.cos(self.wander_angle) * displacement.get_mag()
+        displacement.ypos = math.sin(self.wander_angle) * displacement.get_mag()
+        wanderforce = center_circle + displacement
+        return wanderforce
+
 
     def draw(self, screen):
         """Draw the gameobject."""
@@ -103,4 +113,8 @@ class Agent(object):
     def updateflee(self, deltatime):
         """Update flee logic."""
         self.acceleration = self.flee(self.targetpos)
+        self.update(deltatime)
+
+    def updatewander(self, deltatime):
+        self.acceleration = self.wander(2, 1)
         self.update(deltatime)

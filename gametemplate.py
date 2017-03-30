@@ -25,7 +25,7 @@ class GameTemplate(object):
         self.background = pygame.Surface(self.surface.get_size()).convert()
         self.background.fill((255, 255, 255))
         self.clock = CLOCK
-        self.fps = 60
+        self.fps = 30
         self.playtime = 0.0
         pygame.mouse.set_cursor(*pygame.cursors.diamond)
         self.gamestates = {}
@@ -55,7 +55,7 @@ class GameTemplate(object):
     def startup(self):
         """Do startup routines."""
         pygame.display.set_caption(self.name)
-        self.set_state("seek")
+        self.set_state("wander")
         return True
 
     def update(self):
@@ -91,8 +91,8 @@ class GameTemplate(object):
     def draw(self):
         """Base draw."""
         self.draw_text("FPS:{}{}TIME:{:6.5}{}STATE: {:4.6}".format(
-            int(math.floor(self.clock.get_fps())
-                ), " --- ", self.playtime, " --- ",
+            int(math.floor(self.clock.get_fps())),
+            " --- ", self.playtime, " --- ",
             self.get_state()))
 
         pygame.display.flip()

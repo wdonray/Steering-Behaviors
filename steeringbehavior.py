@@ -1,8 +1,12 @@
 """SteeringBehavior."""
 
+import random
+
 import pygame
 
+from constants import *
 from gametemplate import GameTemplate
+
 
 
 class SteeringBehavior(GameTemplate):
@@ -13,10 +17,14 @@ class SteeringBehavior(GameTemplate):
         super(SteeringBehavior, self).__init__()
         self.name = name
         self.gameobjects = []
-
+        
+        random.seed()
     def addtobatch(self, gameobject):
         """Add gameobjects to this game."""
         self.gameobjects.append(gameobject)
+        for i in self.gameobjects:
+            i.set_target((random.randint(0, SCREEN.get_width() - 10),
+                          random.randint(0, SCREEN.get_height() - 10)))
 
     def update(self):
         """Update this games logic."""
@@ -33,7 +41,8 @@ class SteeringBehavior(GameTemplate):
                     (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
                 i.updateflee(self.deltatime)
         if self.get_state() == "wander":
-            pass
+            for i in self.gameobjects:
+                i.updatewander(self.deltatime)
         return True
 
     def draw(self):
