@@ -3,7 +3,6 @@
 import pygame
 
 from gametemplate import GameTemplate
-from agent import Agent
 
 
 class SteeringBehavior(GameTemplate):

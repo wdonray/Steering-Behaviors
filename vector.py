@@ -13,17 +13,21 @@ class Vector2(object):
         self._ypos = self.value[1]
 
     def setx(self, value):
+        """Set X."""
         self._xpos = value
         self.value = (value, self._ypos)
 
     def getx(self):
+        """Return X."""
         return self.value[0]
 
     def sety(self, value):
+        """Set Y."""
         self._ypos = value
         self.value = (self._xpos, value)
 
     def gety(self):
+        """Return Y."""
         return self.value[1]
 
     xpos = property(getx, setx)

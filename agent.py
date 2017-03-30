@@ -26,9 +26,13 @@ class Agent(object):
         self.targetpos = Vec2(0, 0)
         self.force = Vec2(0, 0)
         self.mass = 1
+        self.heading = Vec2(0, 0)
         self.direction = self.velocity.direction
-        self.surface = pygame.Surface((20, 20), pygame.SRCALPHA)
-        pygame.draw.circle(self.surface, (125, 125, 255), (10, 10), 10, 0)
+        self.surface = pygame.Surface((45, 25), pygame.SRCALPHA)
+        #pygame.draw.circle(self.surface, (125, 125, 255), (10, 10), 10, 0)
+        pygame.draw.lines(self.surface, random.choice((BLACK, BLUE, PINK, MAROON, GREEN)),
+                          True, [(1, 1), (15, 25), (25, 1)], 2)
+        pygame.draw.circle(self.surface, RED, (25, 3), 3)
         self.font = pygame.font.SysFont('mono', 12)
 
     def set_target(self, target):
@@ -61,11 +65,26 @@ class Agent(object):
 
     def draw(self, screen):
         """Draw the gameobject."""
-        textpos = "Pos: <{0:.5} {1:.5}>".format(
-            self.pos.xpos, self.pos.ypos)
-        surface = self.font.render(textpos, True, (0, 0, 0))
-        screen.blit(surface, (self.pos.xpos, self.pos.ypos + 25))
-        screen.blit(self.surface, (self.pos.xpos, self.pos.ypos))
+        textpos = "Pos: <{:0.5}{}{:1.5}>".format(
+            self.pos.xpos, ", ", self.pos.ypos)
+        surfacep = self.font.render(textpos, True, (0, 0, 0))
+        screen.blit(surfacep, (self.pos.xpos - 50, self.pos.ypos + 50))
+
+        targetpos = "TargetPos: <{0:.5} {1:.5}>".format(
+            str(self.targetpos.xpos), str(self.targetpos.ypos))
+        surfacet = self.font.render(targetpos, True, (0, 0, 0))
+        screen.blit(surfacet, (self.pos.xpos - 50, self.pos.ypos + 60))
+
+        velpos = "Velocity: <{0:.5} {1:.5}>".format(
+            str(self.velocity.xpos), str(self.velocity.ypos))
+        surfacev = self.font.render(velpos, True, (0, 0, 0))
+        screen.blit(surfacev, (self.pos.xpos - 50, self.pos.ypos + 70))
+
+        rotate = pygame.transform.rotate(
+            self.surface, -180 * math.atan2(self.heading[1], self.heading[0]) / math.pi)
+        self.heading = Vec2.get_direction(self.velocity)
+
+        screen.blit(rotate, (self.pos.xpos, self.pos.ypos))
 
     def updateseek(self, deltatime):
         """Update gameobject logic."""
@@ -73,8 +92,8 @@ class Agent(object):
         self.velocity = self.velocity + self.acceleration * deltatime
         self.direction = self.velocity.direction
         self.pos = self.pos + self.velocity * deltatime
-        #if (int(self.pos.xpos) == self.targetpos.xpos and
-                #int(self.pos.ypos) == self.targetpos.ypos):
+        # if (int(self.pos.xpos) == self.targetpos.xpos and
+        # int(self.pos.ypos) == self.targetpos.ypos):
 
     def updateflee(self, deltatime):
         """Update gameobject logic."""
