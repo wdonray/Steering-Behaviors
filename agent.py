@@ -31,7 +31,6 @@ class Agent(object):
         pygame.draw.circle(self.surface, (125, 125, 255), (10, 10), 10, 0)
         self.font = pygame.font.SysFont('mono', 12)
 
-
     def set_target(self, target):
         """Set Target."""
         self.targetpos = Vec2(target[0], target[1])
@@ -74,6 +73,8 @@ class Agent(object):
         self.velocity = self.velocity + self.acceleration * deltatime
         self.direction = self.velocity.direction
         self.pos = self.pos + self.velocity * deltatime
+        #if (int(self.pos.xpos) == self.targetpos.xpos and
+                #int(self.pos.ypos) == self.targetpos.ypos):
 
     def updateflee(self, deltatime):
         """Update gameobject logic."""

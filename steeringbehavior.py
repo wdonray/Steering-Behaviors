@@ -2,10 +2,8 @@
 
 import pygame
 
-import constants
-from agent import Agent
 from gametemplate import GameTemplate
-from vector import Vector2 as Vec
+from agent import Agent
 
 
 class SteeringBehavior(GameTemplate):
@@ -42,7 +40,7 @@ class SteeringBehavior(GameTemplate):
     def draw(self):
         """Draw all gameobjects added to this game."""
         for i in self.gameobjects:
-            i.draw(self.screen)
+            i.draw(self.surface)
         super(SteeringBehavior, self).draw()
 
     def run(self):

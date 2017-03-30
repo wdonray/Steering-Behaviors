@@ -18,8 +18,7 @@ class GameTemplate(object):
         self.name = ""
         pygame.display.init()
         pygame.font.init()
-        self.screen = SCREEN
-        self.surface = pygame.display.set_mode((1280, 720))
+        self.surface = SCREEN
         self.background = pygame.Surface(self.surface.get_size()).convert()
         self.background.fill((255, 255, 255))
         self.clock = CLOCK

@@ -17,5 +17,5 @@ PAD = (5, 5)
 WIDTH = 210
 HEIGHT = 620
 CLOCK = pygame.time.Clock()
-SCREEN = pygame.display.set_mode((1280, 720))
+SCREEN = pygame.display.set_mode((800, 600))
 SEARCH_SPACE = Graph([ROWS, COLS])
