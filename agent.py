@@ -6,9 +6,7 @@ import random
 import pygame
 
 from constants import *
-from gametemplate import *
 from vector import Vector2 as Vec2
-from vector import *
 
 random.seed()
 
@@ -26,9 +24,9 @@ class Agent(object):
         self.acceleration = Vec2(0, 0)
         self.targetpos = Vec2(0, 0)
         self.force = Vec2(0, 0)
-        self.mass = 1
-        self.wander_angle = 180
+        self.wander_angle = 45.0
         self.heading = Vec2(0, 0)
+        self.max_velocity = 100
         self.direction = self.velocity.direction
         self.surface = pygame.Surface((45, 25), pygame.SRCALPHA)
         pygame.draw.lines(self.surface, random.choice((BLACK, BLUE, PINK, MAROON, GREEN)),
@@ -40,23 +38,21 @@ class Agent(object):
         """Set Target."""
         self.targetpos = Vec2(target[0], target[1])
 
-    def addforce(self, force):
-        """Add a force."""
-        self.force += force
+    # def addforce(self, force):
+    #     """Add a force."""
+    #     self.force += force
 
     def seek(self, target):
         """Seek Behavior."""
-        max_velocity = 200
         displacement = target - self.pos
-        force = displacement.direction * max_velocity
+        force = displacement.direction * self.max_velocity
         seekforce = force - self.velocity
         return seekforce
 
     def flee(self, target):
         """Flee Behavior."""
-        max_velocity = 200
         displacement = target - self.pos
-        force = displacement.direction * max_velocity * -1
+        force = displacement.direction * self.max_velocity * -1
         fleeforce = force - self.velocity
         return fleeforce
 
@@ -64,8 +60,10 @@ class Agent(object):
         """Wander Behavior."""
         center_circle = self.velocity.get_direction()
         center_circle = center_circle * distance
+
+        displacement = self.velocity.get_direction()
         displacement = Vec2(0, 1) * radius
-        self.wander_angle += (random.random() * 1) - (1 * .5)
+        self.wander_angle += (random.random() * 1.0) - (1.0 * .5)
         displacement.xpos = math.cos(
             self.wander_angle) * displacement.get_mag()
         displacement.ypos = math.sin(
@@ -79,7 +77,7 @@ class Agent(object):
             self.pos.xpos, ", ", self.pos.ypos)
         surfacep = self.font.render(textpos, True, (0, 0, 0))
         screen.blit(surfacep, (self.pos.xpos - 50, self.pos.ypos + 50))
-
+        #pygame.draw.line(self.surface, BLACK, (int(self.pos.xpos), int(self.pos.ypos)), (self.targetpos.xpos, self.targetpos.ypos), 2)
         targetpos = "TargetPos: <{0:.5} {1:.5}>".format(
             str(self.targetpos.xpos), str(self.targetpos.ypos))
         surfacet = self.font.render(targetpos, True, (0, 0, 0))
@@ -102,29 +100,23 @@ class Agent(object):
         screen.blit(rotate, (self.pos.xpos, self.pos.ypos))
 
     def update(self, deltatime):
-        """Update gameobject logic."""
+        """Update seek logic."""
+        self.force = self.seek(
+            self.targetpos) * 25 + self.flee(self.targetpos) + self.wander(400, 400)
         if (self.pos.xpos >= SCREEN.get_width() or
                 (self.pos.ypos >= SCREEN.get_height())):
             self.pos.xpos = SCREEN.get_width() / 2
             self.pos.ypos = SCREEN.get_height() / 2
+
         elif self.pos.xpos <= 0 or self.pos.ypos <= 0:
             self.pos.xpos = SCREEN.get_width() / 2
             self.pos.ypos = SCREEN.get_height() / 2
-        self.velocity = self.velocity + self.acceleration * deltatime
+
+        self.acceleration = self.force
+        self.velocity += self.acceleration * deltatime
+
+        if self.velocity.get_mag() > self.max_velocity:
+            self.velocity = self.velocity.direction * self.max_velocity
+
         self.direction = self.velocity.direction
-        self.pos = self.pos + self.velocity * deltatime
-
-    def updateseek(self, deltatime):
-        """Update seek logic."""
-        self.acceleration = self.seek(self.targetpos)
-        self.update(deltatime)
-
-    def updateflee(self, deltatime):
-        """Update flee logic."""
-        self.acceleration = self.flee(self.targetpos)
-        self.update(deltatime)
-
-    def updatewander(self, deltatime):
-        """Update wander logic."""
-        self.acceleration = self.wander(2, 10)
-        self.update(deltatime)
+        self.pos += self.velocity * deltatime

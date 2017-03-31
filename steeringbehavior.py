@@ -30,19 +30,15 @@ class SteeringBehavior(GameTemplate):
         """Update this games logic."""
         if not super(SteeringBehavior, self).update():
             return False
-        if self.get_state() == "seek":
+        if self.get_state() == "running":
             for i in self.gameobjects:
                 i.set_target(
                     (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
-                i.updateseek(self.deltatime)
-        if self.get_state() == "flee":
-            for i in self.gameobjects:
-                i.set_target(
-                    (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
-                i.updateflee(self.deltatime)
-        if self.get_state() == "wander":
-            for i in self.gameobjects:
-                i.updatewander(self.deltatime)
+                i.update(self.deltatime)
+            # for event in pygame.event.get():
+            #     if event.type == pygame.KEYDOWN:
+            #         if pygame.key.get_pressed()[pygame.K_F1]:
+            #             for i in self.gameobjects:
         return True
 
     def draw(self):

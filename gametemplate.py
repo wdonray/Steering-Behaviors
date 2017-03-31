@@ -29,11 +29,8 @@ class GameTemplate(object):
         self.playtime = 0.0
         pygame.mouse.set_cursor(*pygame.cursors.diamond)
         self.gamestates = {}
-        self.gamestates["init"] = ["seek", "flee", "wander", "dance", "quit"]
-        self.gamestates["seek"] = ["flee", "wander", "dance", "quit"]
-        self.gamestates["flee"] = ["seek", "wander", "dance", "quit"]
-        self.gamestates["wander"] = ["flee", "seek", "dance", "quit"]
-        self.gamestates["dance"] = ["flee", "seek", "quit"]
+        self.gamestates["init"] = ["running"]
+        self.gamestates["running"] = ["quit"]
         self.gamestates["quit"] = []
         self.currentstate = "init"
         self.events = pygame.event.get()
@@ -55,7 +52,7 @@ class GameTemplate(object):
     def startup(self):
         """Do startup routines."""
         pygame.display.set_caption(self.name)
-        self.set_state("wander")
+        self.set_state("running")
         return True
 
     def update(self):
@@ -69,14 +66,6 @@ class GameTemplate(object):
         for event in self.events:
             if event.type == pygame.KEYDOWN:
                 key_pressed = pygame.key.get_pressed()
-                if key_pressed[pygame.K_F1]:
-                    self.set_state("seek")
-                if key_pressed[pygame.K_F2]:
-                    self.set_state("flee")
-                if key_pressed[pygame.K_F3]:
-                    self.set_state("wander")
-                if key_pressed[pygame.K_F10]:
-                    self.set_state("dance")
                 if key_pressed[pygame.K_ESCAPE]:
                     self.set_state("quit")
             if event.type == pygame.QUIT:
@@ -90,7 +79,7 @@ class GameTemplate(object):
 
     def draw(self):
         """Base draw."""
-        self.draw_text("FPS:{}{}TIME:{:6.5}{}STATE: {:4.6}".format(
+        self.draw_text("FPS:{}{}TIME:{:6.5}{}STATE: {:4.7}".format(
             int(math.floor(self.clock.get_fps())),
             " --- ", self.playtime, " --- ",
             self.get_state()))
