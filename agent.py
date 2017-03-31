@@ -66,11 +66,12 @@ class Agent(object):
         center_circle = center_circle * distance
         displacement = Vec2(0, 1) * radius
         self.wander_angle += (random.random() * 1) - (1 * .5)
-        displacement.xpos = math.cos(self.wander_angle) * displacement.get_mag()
-        displacement.ypos = math.sin(self.wander_angle) * displacement.get_mag()
+        displacement.xpos = math.cos(
+            self.wander_angle) * displacement.get_mag()
+        displacement.ypos = math.sin(
+            self.wander_angle) * displacement.get_mag()
         wanderforce = center_circle + displacement
         return wanderforce
-
 
     def draw(self, screen):
         """Draw the gameobject."""
@@ -94,13 +95,21 @@ class Agent(object):
         screen.blit(surfaceh, (screen.get_width() / 2 + 10, 30))
 
         rotate = pygame.transform.rotate(
-            self.surface, -180 * math.atan2(self.heading[1], self.heading[0]) / math.pi)
+            self.surface, -180 * math.atan2(self.heading[1], self.heading[0]) /
+            math.pi)
         self.heading = Vec2.get_direction(self.velocity)
 
         screen.blit(rotate, (self.pos.xpos, self.pos.ypos))
 
     def update(self, deltatime):
         """Update gameobject logic."""
+        if (self.pos.xpos >= SCREEN.get_width() or
+                (self.pos.ypos >= SCREEN.get_height())):
+            self.pos.xpos = SCREEN.get_width() / 2
+            self.pos.ypos = SCREEN.get_height() / 2
+        elif self.pos.xpos <= 0 or self.pos.ypos <= 0:
+            self.pos.xpos = SCREEN.get_width() / 2
+            self.pos.ypos = SCREEN.get_height() / 2
         self.velocity = self.velocity + self.acceleration * deltatime
         self.direction = self.velocity.direction
         self.pos = self.pos + self.velocity * deltatime
@@ -116,5 +125,6 @@ class Agent(object):
         self.update(deltatime)
 
     def updatewander(self, deltatime):
-        self.acceleration = self.wander(2, 1)
+        """Update wander logic."""
+        self.acceleration = self.wander(2, 10)
         self.update(deltatime)

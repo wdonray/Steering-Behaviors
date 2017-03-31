@@ -25,7 +25,7 @@ class GameTemplate(object):
         self.background = pygame.Surface(self.surface.get_size()).convert()
         self.background.fill((255, 255, 255))
         self.clock = CLOCK
-        self.fps = 30
+        self.fps = 60
         self.playtime = 0.0
         pygame.mouse.set_cursor(*pygame.cursors.diamond)
         self.gamestates = {}

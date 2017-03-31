@@ -8,7 +8,6 @@ from constants import *
 from gametemplate import GameTemplate
 
 
-
 class SteeringBehavior(GameTemplate):
     """Seeking Behavior."""
 
@@ -17,8 +16,9 @@ class SteeringBehavior(GameTemplate):
         super(SteeringBehavior, self).__init__()
         self.name = name
         self.gameobjects = []
-        
+
         random.seed()
+
     def addtobatch(self, gameobject):
         """Add gameobjects to this game."""
         self.gameobjects.append(gameobject)
