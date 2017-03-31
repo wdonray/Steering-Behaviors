@@ -4,8 +4,10 @@ import random
 
 import pygame
 
+from agent import Agent as Ag
 from constants import *
 from gametemplate import GameTemplate
+from vector import Vector2 as Vec2
 
 
 class SteeringBehavior(GameTemplate):
@@ -43,8 +45,13 @@ class SteeringBehavior(GameTemplate):
 
     def draw(self):
         """Draw all gameobjects added to this game."""
+
         for i in self.gameobjects:
             i.draw(self.surface)
+            # pygame.draw.line(self.surface, RED, (i.pos.xpos + 15, i.pos.ypos + 15),
+            #                  (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]), 3)
+            # pygame.draw.line(self.surface, BLUE, (i.pos.xpos + 15, i.pos.ypos + 15),
+            #                  (i.velocity.xpos, i.velocity.ypos), 3)
         super(SteeringBehavior, self).draw()
 
     def run(self):
@@ -53,3 +60,8 @@ class SteeringBehavior(GameTemplate):
             while self.update():
                 self.draw()
         super(SteeringBehavior, self).shutdown()
+
+
+if __name__ == '__main__':
+    import maincorrect as Main
+    Main.main()

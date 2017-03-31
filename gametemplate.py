@@ -96,3 +96,6 @@ class GameTemplate(object):
     def shutdown(self):
         """Shutdown the game properly."""
         pygame.quit()
+if __name__ == '__main__':
+    import maincorrect as Main
+    Main.main()

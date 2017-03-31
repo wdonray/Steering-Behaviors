@@ -1,8 +1,6 @@
 """All constants for game."""
 import pygame
 
-from graph import Graph
-
 PINK = (255, 153, 255)
 MAROON = (128, 0, 0)
 YELLOW = (255, 255, 0)

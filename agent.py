@@ -33,6 +33,7 @@ class Agent(object):
                           True, [(1, 1), (15, 25), (25, 1)], 2)
         pygame.draw.circle(self.surface, RED, (25, 3), 3)
         self.font = pygame.font.SysFont('mono', 12)
+        self.wanderforce = None
 
     def set_target(self, target):
         """Set Target."""
@@ -68,16 +69,30 @@ class Agent(object):
             self.wander_angle) * displacement.get_mag()
         displacement.ypos = math.sin(
             self.wander_angle) * displacement.get_mag()
-        wanderforce = center_circle + displacement
-        return wanderforce
+        self.wanderforce = center_circle + displacement
+        return self.wanderforce
 
     def draw(self, screen):
         """Draw the gameobject."""
+        middle = Vec2(self.pos.xpos + self.surface.get_width() / 2,
+                      self.pos.ypos + self.surface.get_height() / 2)
+
+        lineseek = Vec2(middle.xpos + self.velocity.direction.xpos * self.velocity.get_mag(),
+                        middle.ypos + self.velocity.direction.ypos * self.velocity.get_mag())
+        lineflee = Vec2(middle.xpos + self.velocity.direction.xpos * self.velocity.get_mag() * -1,
+                        middle.ypos + self.velocity.direction.ypos * self.velocity.get_mag() * -1)
+        linewander = Vec2(middle.xpos + self.wanderforce.xpos / 6,
+                          middle.ypos + self.wanderforce.ypos / 6)
+
+        pygame.draw.line(screen, RED, middle.value, lineflee.value, 2)
+        pygame.draw.line(screen, BLUE, middle.value, lineseek.value, 2)
+        pygame.draw.line(screen, PINK, middle.value, linewander.value, 2)
+
         textpos = "Pos: <{:0.5}{}{:1.5}>".format(
             self.pos.xpos, ", ", self.pos.ypos)
         surfacep = self.font.render(textpos, True, (0, 0, 0))
         screen.blit(surfacep, (self.pos.xpos - 50, self.pos.ypos + 50))
-        #pygame.draw.line(self.surface, BLACK, (int(self.pos.xpos), int(self.pos.ypos)), (self.targetpos.xpos, self.targetpos.ypos), 2)
+
         targetpos = "TargetPos: <{0:.5} {1:.5}>".format(
             str(self.targetpos.xpos), str(self.targetpos.ypos))
         surfacet = self.font.render(targetpos, True, (0, 0, 0))
@@ -88,7 +103,7 @@ class Agent(object):
         surfacev = self.font.render(velpos, True, (0, 0, 0))
         screen.blit(surfacev, (self.pos.xpos - 50, self.pos.ypos + 70))
 
-        howpos = "F1 to Seek / F2 to Flee / F3 to Wander"
+        howpos = "Steering Behavior created by Donray"
         surfaceh = self.font.render(howpos, True, (0, 0, 0))
         screen.blit(surfaceh, (screen.get_width() / 2 + 10, 30))
 
@@ -102,7 +117,8 @@ class Agent(object):
     def update(self, deltatime):
         """Update seek logic."""
         self.force = self.seek(
-            self.targetpos) * 25 + self.flee(self.targetpos) + self.wander(400, 400)
+            self.targetpos)  * 25 + self.flee(self.targetpos) + self.wander(400, 400)
+        #self.force = self.wander(400, 400)
         if (self.pos.xpos >= SCREEN.get_width() or
                 (self.pos.ypos >= SCREEN.get_height())):
             self.pos.xpos = SCREEN.get_width() / 2
@@ -120,3 +136,8 @@ class Agent(object):
 
         self.direction = self.velocity.direction
         self.pos += self.velocity * deltatime
+
+
+if __name__ == '__main__':
+    import maincorrect as Main
+    Main.main()
