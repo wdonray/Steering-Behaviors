@@ -3,7 +3,6 @@
 import math
 import random
 
-# from gameobject import GameObject
 import pygame
 
 from constants import *
@@ -87,15 +86,11 @@ class GameTemplate(object):
         pygame.display.flip()
         self.surface.blit(self.background, (0, 0))
 
-        if self.get_state() == "dance":
-            self.background.fill((random.randrange(0, 255), random.randrange(0, 255),
-                                  random.randrange(0, 255)))
-            self.surface.blit(self.background, (random.randint(0, SCREEN.get_width()),
-                                                random.randint(0, SCREEN.get_height())))
-
     def shutdown(self):
         """Shutdown the game properly."""
         pygame.quit()
+
+
 if __name__ == '__main__':
     import maincorrect as Main
     Main.main()

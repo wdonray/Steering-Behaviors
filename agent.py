@@ -39,10 +39,6 @@ class Agent(object):
         """Set Target."""
         self.targetpos = Vec2(target[0], target[1])
 
-    # def addforce(self, force):
-    #     """Add a force."""
-    #     self.force += force
-
     def seek(self, target):
         """Seek Behavior."""
         displacement = target - self.pos
@@ -115,10 +111,9 @@ class Agent(object):
         screen.blit(rotate, (self.pos.xpos, self.pos.ypos))
 
     def update(self, deltatime):
-        """Update seek logic."""
+        """Update agent logic."""
         self.force = self.seek(
-            self.targetpos)  * 25 + self.flee(self.targetpos) + self.wander(400, 400)
-        #self.force = self.wander(400, 400)
+            self.targetpos) * 25 + self.flee(self.targetpos) + self.wander(400, 400)
         if (self.pos.xpos >= SCREEN.get_width() or
                 (self.pos.ypos >= SCREEN.get_height())):
             self.pos.xpos = SCREEN.get_width() / 2
