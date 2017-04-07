@@ -34,6 +34,9 @@ class Agent(object):
         pygame.draw.circle(self.surface, RED, (25, 3), 3)
         self.font = pygame.font.SysFont('mono', 12)
         self.wanderforce = None
+        self.indseek = False
+        self.indflee = False
+        self.indwander = False
 
     def set_target(self, target):
         """Set Target."""
@@ -99,9 +102,13 @@ class Agent(object):
         surfacev = self.font.render(velpos, True, (0, 0, 0))
         screen.blit(surfacev, (self.pos.xpos - 50, self.pos.ypos + 70))
 
-        howpos = "Steering Behavior created by Donray"
+        howpos = "      Steering Behavior created by Donray"
         surfaceh = self.font.render(howpos, True, (0, 0, 0))
         screen.blit(surfaceh, (screen.get_width() / 2 + 10, 30))
+
+        inspos = "F1 = Seek / F2 = Flee / F3 = Wander / F4 = All"
+        surfaceh = self.font.render(inspos, True, (0, 0, 0))
+        screen.blit(surfaceh, (screen.get_width() / 2 + 10, 40))
 
         rotate = pygame.transform.rotate(
             self.surface, -180 * math.atan2(self.heading[1], self.heading[0]) /
@@ -112,8 +119,16 @@ class Agent(object):
 
     def update(self, deltatime):
         """Update agent logic."""
-        self.force = self.seek(
-            self.targetpos) * 25 + self.flee(self.targetpos) + self.wander(400, 400)
+        if self.indseek is True:
+            self.force = self.seek(self.targetpos)
+        elif self.indflee is True:
+            self.force = self.flee(self.targetpos)
+        elif self.indwander is True:
+            self.force = self.wander(100, 100)
+        elif self.indseek is False or self.indflee is False or self.indwander is False:
+            self.force = self.seek(
+                self.targetpos) * 25 + self.flee(self.targetpos) + self.wander(100, 100)
+
         if (self.pos.xpos >= SCREEN.get_width() or
                 (self.pos.ypos >= SCREEN.get_height())):
             self.pos.xpos = SCREEN.get_width() / 2

@@ -5,6 +5,7 @@ import random
 
 import pygame
 
+from agent import Agent
 from constants import *
 
 random.seed()
@@ -27,9 +28,13 @@ class GameTemplate(object):
         self.fps = 60
         self.playtime = 0.0
         pygame.mouse.set_cursor(*pygame.cursors.diamond)
+        self.gameobjects = []
         self.gamestates = {}
-        self.gamestates["init"] = ["running"]
-        self.gamestates["running"] = ["quit"]
+        self.gamestates["init"] = ["running", "seek", "flee", "wander"]
+        self.gamestates["running"] = ["seek", "flee", "wander", "quit"]
+        self.gamestates["seek"] = ["running", "flee", "wander", "quit"]
+        self.gamestates["flee"] = ["seek", "running", "wander", "quit"]
+        self.gamestates["wander"] = ["seek", "flee", "running", "quit"]
         self.gamestates["quit"] = []
         self.currentstate = "init"
         self.events = pygame.event.get()
@@ -67,6 +72,44 @@ class GameTemplate(object):
                 key_pressed = pygame.key.get_pressed()
                 if key_pressed[pygame.K_ESCAPE]:
                     self.set_state("quit")
+
+                if key_pressed[pygame.K_F1]:
+                    if self.get_state() is "seek":
+                        self.set_state("running")
+                    else:
+                        self.set_state("seek")
+                    for i in self.gameobjects:
+                        i.indwander = False
+                        i.indflee = False
+                        i.indseek = True if not i.indseek else False
+
+                if key_pressed[pygame.K_F2]:
+                    if self.get_state() is "flee":
+                        self.set_state("running")
+                    else:
+                        self.set_state("flee")
+                    for i in self.gameobjects:
+                        i.indseek = False
+                        i.indwander = False
+                        i.indflee = True if not i.indflee else False
+
+                if key_pressed[pygame.K_F3]:
+                    if self.get_state() is "wander":
+                        self.set_state("running")
+                    else:
+                        self.set_state("wander")
+                    for i in self.gameobjects:
+                        i.indflee = False
+                        i.indseek = False
+                        i.indwander = True if not i.indwander else False
+
+                if key_pressed[pygame.K_F4]:
+                    self.set_state("running")
+                    for i in self.gameobjects:
+                        i.indflee = False
+                        i.indseek = False
+                        i.indwander = False
+
             if event.type == pygame.QUIT:
                 self.set_state("quit")
         return True

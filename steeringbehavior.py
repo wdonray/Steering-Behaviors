@@ -21,9 +21,6 @@ class SteeringBehavior(GameTemplate):
     def addtobatch(self, gameobject):
         """Add gameobjects to this game."""
         self.gameobjects.append(gameobject)
-        for i in self.gameobjects:
-            i.set_target((random.randint(0, SCREEN.get_width() - 10),
-                          random.randint(0, SCREEN.get_height() - 10)))
 
     def update(self):
         """Update this games logic."""
@@ -33,6 +30,19 @@ class SteeringBehavior(GameTemplate):
             for i in self.gameobjects:
                 i.set_target(
                     (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
+                i.update(self.deltatime)
+        if self.get_state() == "seek":
+            for i in self.gameobjects:
+                i.set_target(
+                    (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
+                i.update(self.deltatime)
+        if self.get_state() == "flee":
+            for i in self.gameobjects:
+                i.set_target(
+                    (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
+                i.update(self.deltatime)
+        if self.get_state() == "wander":
+            for i in self.gameobjects:
                 i.update(self.deltatime)
         return True
 
