@@ -102,7 +102,7 @@ class Agent(object):
         surfacev = self.font.render(velpos, True, (0, 0, 0))
         screen.blit(surfacev, (self.pos.xpos - 50, self.pos.ypos + 70))
 
-        howpos = "      Steering Behavior created by Donray"
+        howpos = "Steering Behavior created by Williams, Donray"
         surfaceh = self.font.render(howpos, True, (0, 0, 0))
         screen.blit(surfaceh, (screen.get_width() / 2 + 10, 30))
 
@@ -124,7 +124,7 @@ class Agent(object):
         elif self.indflee is True:
             self.force = self.flee(self.targetpos)
         elif self.indwander is True:
-            self.force = self.wander(100, 100)
+            self.force = self.wander(250, 250)
         elif self.indseek is False or self.indflee is False or self.indwander is False:
             self.force = self.seek(
                 self.targetpos) * 25 + self.flee(self.targetpos) + self.wander(100, 100)
